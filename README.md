@@ -113,24 +113,26 @@ growthpath-ai-lead-system/
 All screenshots are stored in `/07_Screenshots/` and labelled as follows:
 
 | File | Description |
-|---|---|
-| `01_Workflow.png` | Complete n8n workflow with all nodes |
-| `02_Workflow_Outputs.png` | Data output from key nodes |
-| `03_Agent_Conversation.png` | Full AI agent qualification conversation |
-| `04_Booked_Appointment.png` | Google Calendar event with lead details |
-| `05_CRM_Database.png` | Airtable/Sheets with 3+ test leads |
-| `06_Email_Campaign.png` | Zapier workflow + sent email |
-| `07_Live_Agent_Link.md` | Link/handle to live agent for testing |
+| --- | --- |
+| [ ] 01_CRM(airtable).jpeg | Airtable/Sheets with 3+ test leads |
+| [ ] 02_error_workflow.jpeg | error workflow should incase of error in the main workflow |
+| [ ] 03_telegram_hot_lead.jpeg | screenshot of telegram test |
+| [ ] 04_voiceflow_workflow.jpeg | chat bot workflow |
+| [ ] 05_website_cold_lead.jpeg | screenshot of website with cold lead |
+| [ ] 06_website_hot_lead.jpeg | screenshot of website test with hot lead |
+| [ ] 07_website_warm_lead.jpeg | screenshot of website test with warm lad |
+| [ ] 08_workflow_outputs.jpeg | screenshot showing each node of the n8n workflow |
+| [ ] 09_Zapier_workflow.jpeg | Zapier workflow |
 
 ---
 
 ## 🔗 Live Agent Links
 
 | Platform | Link / Handle |
-|---|---|
-| Voiceflow | `[https://creator.voiceflow.com/share/699925ac603f17b83b30b77d/production ]` |
-| Telegram | `[Grow_Path_TG]` |
-| Landing Page | `[https://growthpath-consulting.lovable.app/ ]` |
+| --- | --- |
+| Voiceflow | `([Voiceflow](https://creator.voiceflow.com/share/699925ac603f17b83b30b77d/production ))` |
+| Telegram | `([Grow_Path_TG](https://t.me/Grow_Path_TG_bot))` |
+| Landing Page | `([Lovable](https://growthpath-consulting.lovable.app/ ))` |
 
 ---
 
