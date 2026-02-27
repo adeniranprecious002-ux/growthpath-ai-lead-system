@@ -4,7 +4,7 @@
     {
       "parameters": {
         "httpMethod": "POST",
-        "path": "f4cb2873-a522-48a6-8424-2ed476df755a",
+        "path": "YOUR_N8N_WEBHOOK_ID",
         "options": {}
       },
       "type": "n8n-nodes-base.webhook",
@@ -15,7 +15,7 @@
       ],
       "id": "daf350fc-fd86-4840-9210-769ae854b614",
       "name": "Webhook",
-      "webhookId": "f4cb2873-a522-48a6-8424-2ed476df755a"
+      "webhookId": "YOUR_N8N_WEBHOOK_ID"
     },
     {
       "parameters": {
@@ -259,7 +259,7 @@
       "parameters": {
         "calendar": {
           "__rl": true,
-          "value": "700f2537ad97ac19be91f80140dc609e2e43d2a18986d78102bd01718b4477ed@group.calendar.google.com",
+          "value": "YOUR_GOOGLE_CALENDAR_ID",
           "mode": "id"
         },
         "start": "={{ $now.plus(1, 'days').startOf('day').plus(9, 'hours').toISO() }}",
@@ -318,17 +318,17 @@
         "operation": "create",
         "base": {
           "__rl": true,
-          "value": "appvCXjZ5sJjQuifB",
+          "value": "YOUR_AIRTABLE_BASE_ID",
           "mode": "list",
           "cachedResultName": "GrowPath Sales CRM",
-          "cachedResultUrl": "https://airtable.com/appvCXjZ5sJjQuifB"
+          "cachedResultUrl": "YOUR_AIRTABLE_URL"
         },
         "table": {
           "__rl": true,
-          "value": "tblQTxPgT99RpWr3n",
+          "value": "YOUR_AIRTABLE_TABLE_ID",
           "mode": "list",
           "cachedResultName": "Leads",
-          "cachedResultUrl": "https://airtable.com/appvCXjZ5sJjQuifB/tblQTxPgT99RpWr3n"
+          "cachedResultUrl": "YOUR_AIRTABLE_URL/YOUR_AIRTABLE_TABLE_ID"
         },
         "columns": {
           "mappingMode": "defineBelow",
@@ -639,17 +639,17 @@
         "operation": "create",
         "base": {
           "__rl": true,
-          "value": "appvCXjZ5sJjQuifB",
+          "value": "YOUR_AIRTABLE_BASE_ID",
           "mode": "list",
           "cachedResultName": "GrowPath Sales CRM",
-          "cachedResultUrl": "https://airtable.com/appvCXjZ5sJjQuifB"
+          "cachedResultUrl": "YOUR_AIRTABLE_URL"
         },
         "table": {
           "__rl": true,
-          "value": "tblQTxPgT99RpWr3n",
+          "value": "YOUR_AIRTABLE_TABLE_ID",
           "mode": "list",
           "cachedResultName": "Leads",
-          "cachedResultUrl": "https://airtable.com/appvCXjZ5sJjQuifB/tblQTxPgT99RpWr3n"
+          "cachedResultUrl": "YOUR_AIRTABLE_URL/YOUR_AIRTABLE_TABLE_ID"
         },
         "columns": {
           "mappingMode": "defineBelow",
@@ -931,17 +931,17 @@
         "operation": "create",
         "base": {
           "__rl": true,
-          "value": "appvCXjZ5sJjQuifB",
+          "value": "YOUR_AIRTABLE_BASE_ID",
           "mode": "list",
           "cachedResultName": "GrowPath Sales CRM",
-          "cachedResultUrl": "https://airtable.com/appvCXjZ5sJjQuifB"
+          "cachedResultUrl": "YOUR_AIRTABLE_URL"
         },
         "table": {
           "__rl": true,
-          "value": "tblQTxPgT99RpWr3n",
+          "value": "YOUR_AIRTABLE_TABLE_ID",
           "mode": "list",
           "cachedResultName": "Leads",
-          "cachedResultUrl": "https://airtable.com/appvCXjZ5sJjQuifB/tblQTxPgT99RpWr3n"
+          "cachedResultUrl": "YOUR_AIRTABLE_URL/YOUR_AIRTABLE_TABLE_ID"
         },
         "columns": {
           "mappingMode": "defineBelow",
@@ -1221,7 +1221,7 @@
     {
       "parameters": {
         "method": "POST",
-        "url": "https://hooks.zapier.com/hooks/catch/26557384/ucce0vp/",
+        "url": "https://YOUR_ZAPIER_WEBHOOK_URL",
         "sendBody": true,
         "specifyBody": "json",
         "jsonBody": "={\n  \"name\": \"{{ $json.fields.Name }}\",\n  \"email\": \"{{ $json.fields.Email }}\",\n  \"company\": \"{{ $json.fields.Company }}\",\n  \"service\": \"{{ $json.fields.Services }}\",\n  \"budget\": \"{{ $json.fields['Budget Range'] }}\",\n  \"timeline\": \"{{ $('Edit Fields').item.json.body.timeline }}\",\n  \"label\": \"{{ $json.fields['Lead score'] }}\"\n}",
@@ -1412,7 +1412,7 @@
     {
       "parameters": {
         "method": "POST",
-        "url": "https://ts-academy-capstone.app.n8n.cloud/webhook/f4cb2873-a522-48a6-8424-2ed476df755a",
+        "url": "YOUR_N8N_WEBHOOK_URL",
         "sendBody": true,
         "specifyBody": "json",
         "jsonBody": "={\n  \"name\": \"{{ $json.name }}\",\n  \"email\": \"{{ $json.email }}\",\n  \"phone\": \"{{ $json.phone }}\",\n  \"company\": \"{{ $json.company }}\",\n  \"service\": \"{{ $json.service }}\",\n  \"budget\": \"{{ $json.budget }}\",\n  \"timeline\": \"{{ $json.timeline }}\",\n  \"lead_score\": \"{{ $json.lead_score }}\",\n  \"source\": \"Telegram\"\n}",
