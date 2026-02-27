@@ -1,0 +1,1923 @@
+{
+  "name": "GrowthPath Workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "f4cb2873-a522-48a6-8424-2ed476df755a",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -1328,
+        -80
+      ],
+      "id": "daf350fc-fd86-4840-9210-769ae854b614",
+      "name": "Webhook",
+      "webhookId": "f4cb2873-a522-48a6-8424-2ed476df755a"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "30191f48-b3af-449d-9908-4b278480d8c7",
+              "name": "body.name",
+              "value": "={{ $json.body.name }}",
+              "type": "string"
+            },
+            {
+              "id": "9452e528-0491-4e8b-b216-e0aec65d76fc",
+              "name": "body.email",
+              "value": "={{ $json.body.email }}",
+              "type": "string"
+            },
+            {
+              "id": "0e08f2a5-3f44-4549-a63d-08da197efcf8",
+              "name": "body.phone",
+              "value": "={{ $json.body.phone }}",
+              "type": "string"
+            },
+            {
+              "id": "eccda9be-520b-4e4d-a5fe-21170f75da41",
+              "name": "body.company",
+              "value": "={{ $json.body.company }}",
+              "type": "string"
+            },
+            {
+              "id": "4ba0b72c-d7e4-4751-8193-7ae4b3838def",
+              "name": "body.service",
+              "value": "={{ $json.body.service }}",
+              "type": "string"
+            },
+            {
+              "id": "051cec19-c061-4e8e-890e-e94cd0505cb1",
+              "name": "body.budget",
+              "value": "={{ $json.body.budget }}",
+              "type": "string"
+            },
+            {
+              "id": "b3124b45-29ff-432c-8333-3ef3c427e0a6",
+              "name": "body.timeline",
+              "value": "={{ $json.body.timeline }}",
+              "type": "string"
+            },
+            {
+              "id": "17c5103f-bbbc-4046-9384-0edd1d0d363b",
+              "name": "body.lead_score",
+              "value": "={{ $json.body.lead_score }}",
+              "type": "string"
+            },
+            {
+              "id": "8d242fb7-9cac-4fce-a4c3-f5efca6d5fa3",
+              "name": "first name",
+              "value": "={{ $json.body.name.split(' ')[0] }}",
+              "type": "string"
+            },
+            {
+              "id": "ceb9580a-e057-49d1-9ded-a8efe16d621c",
+              "name": "body.source",
+              "value": "={{ $json.body.source === \"Voiceflow\" ? \"Website\" : $json.body.source }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -1136,
+        16
+      ],
+      "id": "a75e47b7-25f9-4313-82b9-e3d54cb0125f",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "GPT-4O-MINI"
+        },
+        "responses": {
+          "values": [
+            {
+              "role": "system",
+              "content": "You are a lead scoring assistant for GrowthPath Digital Consulting,\na digital marketing agency in Lagos, Nigeria.\n\nYou will receive lead information and must score them STRICTLY based on the \npoint system below. Do NOT use your own judgment. Follow the rules exactly.\n\nSTEP 1 — CALCULATE POINTS:\n\nBUDGET POINTS (choose only one):\n- ₦500,000 and above = 40 points\n- ₦200,000 to ₦499,999 = 25 points\n- Below ₦200,000 or vague or student or free advice = 5 points\n- If budget is a range, ALWAYS use the HIGHER number in the range for scoring.\n\nTIMELINE POINTS (choose only one):\n- \"Immediately\" or \"ASAP\" or \"now\" or \"this month\" or \"right away\" = 30 points\n- \"1 to 3 months\" or \"soon\" or \"next month\" or \"few months\" = 15 points\n- Unclear or \"someday\" or \"just browsing\" or \"not sure\" = 5 points\n\nSERVICES POINTS (choose only one):\n- More than one specific service mentioned = 20 points\n- Exactly one specific service mentioned = 10 points\n- Vague or unsure = 5 points\n\nCONTACT COMPLETENESS POINTS:\n- Name AND email AND phone AND company all provided = 10 points\n- Any one of these is missing = 0 points\n\nSTEP 2 — ADD ALL POINTS TOGETHER:\nTotal = Budget points + Timeline points + Services points + Contact points\n\nSTEP 3 — ASSIGN LABEL (choose only one):\n- Total is 70 or above = \"Hot\"\n- Total is 40 to 69 = \"Warm\"\n- Total is below 40 = \"Cold\"\n\nSTRICT RULES:\n1. NEVER output \"HIGH\", \"LOW\", \"MEDIUM\" or any other label. ONLY use \"Hot\", \"Warm\", or \"Cold\"\n2. ALWAYS show your point calculation in the reason field\n3. NEVER guess or estimate — if information is missing, assign the lowest points for that category\n4. ALWAYS use the HIGHER end of any budget range\n\nSTEP 4 — Return ONLY this JSON, no explanation, no markdown, no backticks:\n{\"score\": 85, \"label\": \"Hot\", \"reason\": \"Budget ₦2M = 40pts, Timeline Immediately = 30pts, Services Social Media = 10pts, Contact complete = 10pts, Total = 90pts\"}"
+            },
+            {
+              "content": "=Name: {{ $json.body.name }}\nEmail: {{ $json.body.email }}\nPhone: {{ $json.body.phone }}\nCompany: {{ $json.body.company }}\nBudget: {{ $json.body.budget }}\nServices: {{ $json.body.service }}\nTimeline: {{ $json.body.timeline }}"
+            }
+          ]
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 2.1,
+      "position": [
+        -960,
+        -128
+      ],
+      "id": "81320d7f-32af-43cb-a66e-00cad41a3112",
+      "name": "Message a model",
+      "credentials": {
+        "openAiApi": {
+          "id": "zGgDovBFFbp9MHPb",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "b21fa703-8b4c-4850-a684-f1d8cabd7968",
+              "name": "score",
+              "value": "={{ JSON.parse($json.output[0].content[0].text).score }}",
+              "type": "string"
+            },
+            {
+              "id": "4e635c41-46af-474d-80a7-69db4607e940",
+              "name": "label",
+              "value": "={{ JSON.parse($json.output[0].content[0].text).label }}",
+              "type": "string"
+            },
+            {
+              "id": "9b360214-1467-4ec3-be48-3bd1ef452795",
+              "name": "reason",
+              "value": "={{ JSON.parse($json.output[0].content[0].text).reason }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -656,
+        0
+      ],
+      "id": "60a541bb-0d4b-4d6b-8dd2-bdeff8f25180",
+      "name": "Edit Fields1"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.label }}",
+                    "rightValue": "Hot",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "2342cd03-8212-4399-8804-09b9949e474f"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Hot"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "13f239d1-b808-45fe-b8f5-4fdac14d67a7",
+                    "leftValue": "={{ $json.label }}",
+                    "rightValue": "Warm",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Warm"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "93e52ec5-c358-45d3-b7b8-76aa4ba7036c",
+                    "leftValue": "={{ $json.label }}",
+                    "rightValue": "Cold",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Cold"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        -496,
+        -144
+      ],
+      "id": "e05cc626-a9df-45c3-9ed2-5efc37eafa41",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "calendar": {
+          "__rl": true,
+          "value": "700f2537ad97ac19be91f80140dc609e2e43d2a18986d78102bd01718b4477ed@group.calendar.google.com",
+          "mode": "id"
+        },
+        "start": "={{ $now.plus(1, 'days').startOf('day').plus(9, 'hours').toISO() }}",
+        "end": "={{ $now.plus(1, 'days').startOf('day').plus(9, 'hours').plus(30, 'minutes').toISO() }}",
+        "additionalFields": {
+          "attendees": [
+            "={{ $('Edit Fields').item.json.body.email }}"
+          ],
+          "description": "=Name: {{ $('Edit Fields').item.json.body.name }}\nCompany: {{ $('Edit Fields').item.json.body.company }}\nBudget: {{ $('Edit Fields').item.json.body.budget }}\nServices: {{ $('Edit Fields').item.json.body.service }}\nReason: {{ $json.reason }}\nScore: {{ $json.score }}",
+          "sendUpdates": "all",
+          "summary": "=Discovery Call — {{ $('Edit Fields').item.json.body.name }}"
+        }
+      },
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1.3,
+      "position": [
+        -288,
+        -256
+      ],
+      "id": "2daf4466-8d04-4c4a-ba85-913c36f04658",
+      "name": "Create an event",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "p5gRMUmxAsYJ5Fqe",
+          "name": "Google Calendar account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json.attendees[0].email }}",
+        "subject": "Your GrowthPath Consultation is Confirmed! 🎉",
+        "message": "=<html>\n<body style=\"font-family: Arial, sans-serif; color: #333; max-width: 600px; margin: auto;\">\n\n  <h2 style=\"color: #2E86C1;\">Your Discovery Call is Confirmed! 🎉</h2>\n  \n  <p>Hi {{ $('Edit Fields').item.json['first name'] }},</p>\n\n  <p>Thank you for reaching out to <strong>GrowthPath Digital Consulting</strong>! \n  We're excited to speak with you.</p>\n\n  <p>Your discovery call has been scheduled for:</p>\n\n  <div style=\"background: #f4f4f4; padding: 15px; border-radius: 8px; margin: 20px 0;\">\n    <strong>📅 Date:</strong> Tomorrow at 9:00 AM<br>\n    <strong>⏱ Duration:</strong> 30 minutes<br>\n    <strong>📧 Calendar invite sent to:</strong> {{ $('Edit Fields').item.json.body.email }}\n  </div>\n\n  <p><strong>Your inquiry summary:</strong></p>\n  <ul>\n    <li><strong>Services:</strong> {{ $('Edit Fields').item.json.body.service }}</li>\n    <li><strong>Budget:</strong> {{ $('Edit Fields').item.json.body.budget }}</li>\n    <li><strong>Timeline:</strong> {{ $('Edit Fields').item.json.body.timeline }}</li>\n    <li><strong>Company:</strong> {{ $('Edit Fields').item.json.body.company }}</li>\n  </ul>\n\n  <p>Please check your email for your Google Calendar invite. \n  If you need to reschedule, simply reply to this email.</p>\n\n  <p>We look forward to helping you grow your business!</p>\n\n  <p>Best regards,<br>\n  <strong>GrowthPath Digital Consulting Team</strong><br>\n  Lagos, Nigeria 🇳🇬</p>\n\n</body>\n</html>",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        -80,
+        -256
+      ],
+      "id": "565b67fa-660c-45aa-853a-8e4774f51cb0",
+      "name": "Send a message",
+      "webhookId": "5783c3d9-9a9b-4c88-8733-39ef25f0dd79",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "foGhhoE6h6qLeU4b",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "create",
+        "base": {
+          "__rl": true,
+          "value": "appvCXjZ5sJjQuifB",
+          "mode": "list",
+          "cachedResultName": "GrowPath Sales CRM",
+          "cachedResultUrl": "https://airtable.com/appvCXjZ5sJjQuifB"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblQTxPgT99RpWr3n",
+          "mode": "list",
+          "cachedResultName": "Leads",
+          "cachedResultUrl": "https://airtable.com/appvCXjZ5sJjQuifB/tblQTxPgT99RpWr3n"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Name": "={{ $('Edit Fields').item.json.body.name }}",
+            "Email": "={{ $('Edit Fields').item.json.body.email }}",
+            "Phone": "={{ $('Edit Fields').item.json.body.phone }}",
+            "Company": "={{ $('Edit Fields').item.json.body.company }}",
+            "Services": "={{ $('Edit Fields').item.json.body.service }}",
+            "Budget Range": "={{ $('Edit Fields').item.json.body.budget }}",
+            "Lead score": "={{ $('Edit Fields1').item.json.label }}",
+            "Status": "Meeting Booked",
+            "Date and time of inquiry": "={{ $now }}",
+            "Appointment Date and Time": "={{ $('Create an event').item.json.start.dateTime }}",
+            "Source": "={{ $('Edit Fields').item.json.body.source }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Name",
+              "displayName": "Name",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Phone",
+              "displayName": "Phone",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Company",
+              "displayName": "Company",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Services",
+              "displayName": "Services",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Budget Range",
+              "displayName": "Budget Range",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Lead score",
+              "displayName": "Lead score",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "Hot",
+                  "value": "Hot"
+                },
+                {
+                  "name": "Warm",
+                  "value": "Warm"
+                },
+                {
+                  "name": "Cold",
+                  "value": "Cold"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Source",
+              "displayName": "Source",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "Website",
+                  "value": "Website"
+                },
+                {
+                  "name": "Instagram",
+                  "value": "Instagram"
+                },
+                {
+                  "name": "Whatsapp",
+                  "value": "Whatsapp"
+                },
+                {
+                  "name": "Telegram",
+                  "value": "Telegram"
+                },
+                {
+                  "name": "Other",
+                  "value": "Other"
+                },
+                {
+                  "name": "Facebook",
+                  "value": "Facebook"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "New",
+                  "value": "New"
+                },
+                {
+                  "name": "Qualified",
+                  "value": "Qualified"
+                },
+                {
+                  "name": "Meeting Booked",
+                  "value": "Meeting Booked"
+                },
+                {
+                  "name": "Contacted",
+                  "value": "Contacted"
+                },
+                {
+                  "name": "Nurture",
+                  "value": "Nurture"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Notes",
+              "displayName": "Notes",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Date and time of inquiry",
+              "displayName": "Date and time of inquiry",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Appointment Date and Time",
+              "displayName": "Appointment Date and Time",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Assigned To",
+              "displayName": "Assigned To",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Auto-Enriched Profile",
+              "displayName": "Auto-Enriched Profile",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Next Outreach Suggestion",
+              "displayName": "Next Outreach Suggestion",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Interactions",
+              "displayName": "Interactions",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "array",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        128,
+        -256
+      ],
+      "id": "d839745d-1c04-4329-93c6-215a80aa39ed",
+      "name": "Create a record",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "SyNRCairpK6dzfBI",
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "select": "channel",
+        "channelId": {
+          "__rl": true,
+          "value": "C0AG99S8735",
+          "mode": "list",
+          "cachedResultName": "hot-leads"
+        },
+        "text": "=🔥 *NEW HOT LEAD ALERT!*\n\n*Name:* {{ $('Edit Fields').item.json.body.name }}\n*Company:* {{ $('Edit Fields').item.json.body.company }}\n*Email:* {{ $('Edit Fields').item.json.body.email }}\n*Phone:* {{ $('Edit Fields').item.json.body.phone }}\n*Services:* {{ $('Edit Fields').item.json.body.service }}\n*Budget:* {{ $('Edit Fields').item.json.body.budget }}\n*Timeline:* {{ $('Edit Fields').item.json.body.timeline }}\n*Score:* {{ $('Edit Fields1').item.json.score }} — {{ $('Edit Fields1').item.json.label }}\n*Reason:* {{ $('Edit Fields1').item.json.reason }}\n\n📅 *Meeting booked for:* {{ $('Create an event').item.json.start.dateTime.toLocaleString('en-NG', {dateStyle: 'full', timeStyle: 'short'}) }}",
+        "otherOptions": {}
+      },
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.4,
+      "position": [
+        336,
+        -256
+      ],
+      "id": "52f3dcb6-59b6-4203-97e0-d623684065bd",
+      "name": "Send a message1",
+      "webhookId": "f84e36fe-81ca-4c35-aa80-8bb265848db0",
+      "credentials": {
+        "slackApi": {
+          "id": "HdxrFdq3prxc2BWP",
+          "name": "Slack account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "create",
+        "base": {
+          "__rl": true,
+          "value": "appvCXjZ5sJjQuifB",
+          "mode": "list",
+          "cachedResultName": "GrowPath Sales CRM",
+          "cachedResultUrl": "https://airtable.com/appvCXjZ5sJjQuifB"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblQTxPgT99RpWr3n",
+          "mode": "list",
+          "cachedResultName": "Leads",
+          "cachedResultUrl": "https://airtable.com/appvCXjZ5sJjQuifB/tblQTxPgT99RpWr3n"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Name": "={{ $('Edit Fields').item.json.body.name }}",
+            "Email": "={{ $('Edit Fields').item.json.body.email }}",
+            "Phone": "={{ $('Edit Fields').item.json.body.phone }}",
+            "Company": "={{ $('Edit Fields').item.json.body.company }}",
+            "Services": "={{ $('Edit Fields').item.json.body.service }}",
+            "Budget Range": "={{ $('Edit Fields').item.json.body.budget }}",
+            "Lead score": "={{ $('Edit Fields1').item.json.label }}",
+            "Status": "Qualified",
+            "Date and time of inquiry": "={{ $now }}",
+            "Source": "={{ $('Edit Fields').item.json.body.source }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Name",
+              "displayName": "Name",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Phone",
+              "displayName": "Phone",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Company",
+              "displayName": "Company",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Services",
+              "displayName": "Services",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Budget Range",
+              "displayName": "Budget Range",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Lead score",
+              "displayName": "Lead score",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "Hot",
+                  "value": "Hot"
+                },
+                {
+                  "name": "Warm",
+                  "value": "Warm"
+                },
+                {
+                  "name": "Cold",
+                  "value": "Cold"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Source",
+              "displayName": "Source",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "Website",
+                  "value": "Website"
+                },
+                {
+                  "name": "Instagram",
+                  "value": "Instagram"
+                },
+                {
+                  "name": "Whatsapp",
+                  "value": "Whatsapp"
+                },
+                {
+                  "name": "Telegram",
+                  "value": "Telegram"
+                },
+                {
+                  "name": "Other",
+                  "value": "Other"
+                },
+                {
+                  "name": "Facebook",
+                  "value": "Facebook"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "New",
+                  "value": "New"
+                },
+                {
+                  "name": "Qualified",
+                  "value": "Qualified"
+                },
+                {
+                  "name": "Meeting Booked",
+                  "value": "Meeting Booked"
+                },
+                {
+                  "name": "Contacted",
+                  "value": "Contacted"
+                },
+                {
+                  "name": "Nurture",
+                  "value": "Nurture"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Notes",
+              "displayName": "Notes",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Date and time of inquiry",
+              "displayName": "Date and time of inquiry",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Appointment Date and Time",
+              "displayName": "Appointment Date and Time",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Assigned To",
+              "displayName": "Assigned To",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Auto-Enriched Profile",
+              "displayName": "Auto-Enriched Profile",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Next Outreach Suggestion",
+              "displayName": "Next Outreach Suggestion",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Interactions",
+              "displayName": "Interactions",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "array",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        -128,
+        -48
+      ],
+      "id": "e87edec0-6728-430e-8c6e-5735b6cc65c2",
+      "name": "Create a record1",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "SyNRCairpK6dzfBI",
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "create",
+        "base": {
+          "__rl": true,
+          "value": "appvCXjZ5sJjQuifB",
+          "mode": "list",
+          "cachedResultName": "GrowPath Sales CRM",
+          "cachedResultUrl": "https://airtable.com/appvCXjZ5sJjQuifB"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblQTxPgT99RpWr3n",
+          "mode": "list",
+          "cachedResultName": "Leads",
+          "cachedResultUrl": "https://airtable.com/appvCXjZ5sJjQuifB/tblQTxPgT99RpWr3n"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Name": "={{ $('Edit Fields').item.json.body.name }}",
+            "Email": "={{ $('Edit Fields').item.json.body.email }}",
+            "Phone": "={{ $('Edit Fields').item.json.body.phone }}",
+            "Company": "={{ $('Edit Fields').item.json.body.company }}",
+            "Services": "={{ $('Edit Fields').item.json.body.service }}",
+            "Budget Range": "={{ $('Edit Fields').item.json.body.budget }}",
+            "Lead score": "={{ $('Edit Fields1').item.json.label }}",
+            "Status": "Nurture",
+            "Date and time of inquiry": "={{ $now }}",
+            "Source": "={{ $('Edit Fields').item.json.body.source }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Name",
+              "displayName": "Name",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Phone",
+              "displayName": "Phone",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Company",
+              "displayName": "Company",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Services",
+              "displayName": "Services",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Budget Range",
+              "displayName": "Budget Range",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Lead score",
+              "displayName": "Lead score",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "Hot",
+                  "value": "Hot"
+                },
+                {
+                  "name": "Warm",
+                  "value": "Warm"
+                },
+                {
+                  "name": "Cold",
+                  "value": "Cold"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Source",
+              "displayName": "Source",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "Website",
+                  "value": "Website"
+                },
+                {
+                  "name": "Instagram",
+                  "value": "Instagram"
+                },
+                {
+                  "name": "Whatsapp",
+                  "value": "Whatsapp"
+                },
+                {
+                  "name": "Telegram",
+                  "value": "Telegram"
+                },
+                {
+                  "name": "Other",
+                  "value": "Other"
+                },
+                {
+                  "name": "Facebook",
+                  "value": "Facebook"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "New",
+                  "value": "New"
+                },
+                {
+                  "name": "Qualified",
+                  "value": "Qualified"
+                },
+                {
+                  "name": "Meeting Booked",
+                  "value": "Meeting Booked"
+                },
+                {
+                  "name": "Contacted",
+                  "value": "Contacted"
+                },
+                {
+                  "name": "Nurture",
+                  "value": "Nurture"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Notes",
+              "displayName": "Notes",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Date and time of inquiry",
+              "displayName": "Date and time of inquiry",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Appointment Date and Time",
+              "displayName": "Appointment Date and Time",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Assigned To",
+              "displayName": "Assigned To",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Auto-Enriched Profile",
+              "displayName": "Auto-Enriched Profile",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Next Outreach Suggestion",
+              "displayName": "Next Outreach Suggestion",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Interactions",
+              "displayName": "Interactions",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "array",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        -224,
+        128
+      ],
+      "id": "e36c3342-e8b2-4e1d-b3d6-089a9221363e",
+      "name": "Create a record2",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "SyNRCairpK6dzfBI",
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://hooks.zapier.com/hooks/catch/26557384/ucce0vp/",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"name\": \"{{ $json.fields.Name }}\",\n  \"email\": \"{{ $json.fields.Email }}\",\n  \"company\": \"{{ $json.fields.Company }}\",\n  \"service\": \"{{ $json.fields.Services }}\",\n  \"budget\": \"{{ $json.fields['Budget Range'] }}\",\n  \"timeline\": \"{{ $('Edit Fields').item.json.body.timeline }}\",\n  \"label\": \"{{ $json.fields['Lead score'] }}\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        80,
+        -48
+      ],
+      "id": "45c4b71f-5de0-453a-9262-5fa8c43a5108",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json.fields.Email }}",
+        "subject": "Thank you for reaching out to GrowthPath 🙏",
+        "message": "=<p>Hi {{ $('Edit Fields').item.json['first name'] }},</p>\n\n<p>Thank you so much for reaching out to \n<strong>GrowthPath Digital Consulting!</strong></p>\n\n<p>We appreciate your interest in our services. Based on your current \nrequirements, we may not be the best fit right now — but we'd love \nto stay connected!</p>\n\n<p>Here are some free resources to help grow your business online \nin the meantime:</p>\n\n<ul>\n  <li>📖 How to grow your brand on social media</li>\n  <li>🔍 Beginner's guide to SEO</li>\n  <li>📢 How to run your first paid ad campaign</li>\n</ul>\n\n<p>When you're ready to take your digital marketing to the next level, \nwe'll be right here. Simply reply to this email or visit our website \nto get started.</p>\n\n<p>Wishing you and <strong>{{ $json.fields.Company }}</strong> all the best!</p>\n\n<p>Best regards,<br>\n<strong>GrowthPath Digital Consulting Team</strong><br>\nLagos, Nigeria 🇳🇬</p>",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        -16,
+        128
+      ],
+      "id": "6e381990-8b29-41d0-8512-f3348d740ad6",
+      "name": "Send a message2",
+      "webhookId": "f22ab7cd-a068-496d-801e-09772a1ebb7e",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "foGhhoE6h6qLeU4b",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "updates": [
+          "message"
+        ],
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -1040,
+        432
+      ],
+      "id": "81539c63-0eae-4886-8b0b-a0c96cf1693c",
+      "name": "Telegram Trigger",
+      "webhookId": "da54b08d-4814-4a59-aa8e-b2f47004e8c9",
+      "credentials": {
+        "telegramApi": {
+          "id": "uZ1m6UxFH3OAyBpV",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.message.text }}",
+        "options": {
+          "systemMessage": "You are a friendly lead qualification assistant for GrowthPath Digital Consulting, a digital marketing agency in Lagos. Your job is to have a warm, natural conversation and collect the following information one question at a time:\n\n1. Full name\n2. Email address\n3. Phone number\n4. Company name\n5. Service interested in (Social Media Management, SEO, Paid Advertising, Brand Strategy)\n6. Estimated budget\n7. Timeline to start\n\nScoring rules:\n- Hot: Budget above ₦1,000,000 and timeline within 1 month\n- Warm: Budget between ₦300,000–₦1,000,000 or timeline within 3 months\n- Cold: Budget below ₦300,000 or no clear timeline\n- If budget is a range, ALWAYS use the HIGHER number in the range for scoring.\n\nOnce you have ALL information, end your final message with exactly this JSON and nothing after it:\n\n{\"name\":\"\",\"email\":\"\",\"phone\":\"\",\"company\":\"\",\"service\":\"\",\"budget\":\"\",\"timeline\":\"\",\"lead_score\":\"\"}\n\nWhen a user first messages you, greet them warmly, introduce yourself as GrowthPath's assistant, and ask for their full name to get started.\n\nDo not output the JSON until every single field is collected.\n\nNever accept \"I don't know\", \"skip\", or blank answers. Politely insist on collecting every field before outputting the JSON."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        -832,
+        432
+      ],
+      "id": "a1773583-e332-469f-8422-d26cd4cbb3c1",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-5-mini"
+        },
+        "responsesApiEnabled": false,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        -976,
+        640
+      ],
+      "id": "65edb421-e0ab-4630-8af0-576f60b9a126",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "zGgDovBFFbp9MHPb",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
+        "contextWindowLength": 10
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        -832,
+        640
+      ],
+      "id": "cadf4c4e-816c-4b20-8343-dc7b4858e356",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
+        "text": "={{ $('AI Agent').item.json.output }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        -272,
+        480
+      ],
+      "id": "82530e69-8ae8-4632-bac0-004c7e6706cb",
+      "name": "Send a text message",
+      "webhookId": "c8238f11-69f3-4acf-ac39-ef17d34d19ee",
+      "credentials": {
+        "telegramApi": {
+          "id": "uZ1m6UxFH3OAyBpV",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "287fe274-39e6-4749-87cc-ab0d33db5f8d",
+              "leftValue": "={{ $('AI Agent').item.json.output }}",
+              "rightValue": "lead_score",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -512,
+        384
+      ],
+      "id": "44d842ae-6e13-4ac6-ac35-5f585b42866a",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "jsCode": "const output = $('AI Agent').item.json.output;\n\n// Extract JSON block from the agent's output\nconst jsonMatch = output.match(/\\{[\\s\\S]*\\}/);\n\nif (!jsonMatch) {\n  throw new Error(\"No JSON found in agent output\");\n}\n\nconst lead = JSON.parse(jsonMatch[0]);\n\n// Add source and timestamp\nlead.source = \"Telegram\";\nlead.inquiry_date = new Date().toISOString();\n\nreturn [{ json: lead }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -224,
+        320
+      ],
+      "id": "f1ab43f7-136c-4d92-af98-bc3a406960b9",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://ts-academy-capstone.app.n8n.cloud/webhook/f4cb2873-a522-48a6-8424-2ed476df755a",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"name\": \"{{ $json.name }}\",\n  \"email\": \"{{ $json.email }}\",\n  \"phone\": \"{{ $json.phone }}\",\n  \"company\": \"{{ $json.company }}\",\n  \"service\": \"{{ $json.service }}\",\n  \"budget\": \"{{ $json.budget }}\",\n  \"timeline\": \"{{ $json.timeline }}\",\n  \"lead_score\": \"{{ $json.lead_score }}\",\n  \"source\": \"Telegram\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        80,
+        336
+      ],
+      "id": "1f8ed880-8b98-4248-9bd3-75d392a3eb3d",
+      "name": "HTTP Request1"
+    },
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "filters": {
+          "labelIds": [
+            "INBOX"
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.gmailTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -1184,
+        928
+      ],
+      "id": "5d212a7a-437b-47cd-9f5a-d39f9da94e9f",
+      "name": "Gmail Trigger",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "foGhhoE6h6qLeU4b",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "GPT-4O-MINI"
+        },
+        "responses": {
+          "values": [
+            {
+              "role": "system",
+              "content": "You are a professional email assistant for GrowthPath Digital Consulting,\na digital marketing agency in Lagos, Nigeria.\n\nYour job is to read incoming email replies from leads and do TWO things:\n1. Decide if the email needs ESCALATION to a human team member\n2. If no escalation needed, write a helpful, friendly reply\n\nESCALATION RULES — escalate if the email contains:\n- Complaints or angry language\n- Legal threats\n- Request to speak to a manager\n- Mentions of refund or cancellation\n- Very complex technical questions you cannot answer\n- Anything sensitive or urgent\n\nGUIDELINES FOR REPLIES:\n- Always address them by first name if available\n- Be warm, professional and helpful\n- Keep replies concise and clear\n- Always sign off as GrowthPath Digital Consulting Team\n- If they want to book a call include: https://calendar.app.google/DHWQ829f7kY8FmnY6\n- Never make up information you don't know\n\nCRITICAL OUTPUT RULES:\n- Output ONLY a single line of valid JSON\n- NO line breaks inside the JSON\n- NO newline characters (\\n) inside values\n- NO markdown, NO backticks, NO explanation\n- Use <br> instead of line breaks inside suggested_reply\n\nYour output MUST follow this exact format as a single line:\n{\"escalate\": false, \"reason\": \"\", \"suggested_reply\": \"Hi Name,<br><br>Thank you for reaching out.<br><br>Best regards,<br>GrowthPath Digital Consulting Team\"}\n\nFor escalation:\n{\"escalate\": true, \"reason\": \"Customer requested to speak to a manager\", \"suggested_reply\": \"\"}"
+            },
+            {
+              "content": "=From: {{ $json.From }}\nSubject: {{ $json.Subject }}\nEmail Body: {{ $json.snippet }}"
+            }
+          ]
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 2.1,
+      "position": [
+        -976,
+        928
+      ],
+      "id": "07dc93d4-342d-466d-8748-644c9a62ac6f",
+      "name": "Message a model1",
+      "credentials": {
+        "openAiApi": {
+          "id": "zGgDovBFFbp9MHPb",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "633d94ae-ba3b-45a1-a6fb-82d4fec322f9",
+              "name": "escalate",
+              "value": "={{ JSON.parse($json.output[0].content[0].text).escalate }}",
+              "type": "string"
+            },
+            {
+              "id": "d2a8aab8-28a0-4ea3-803f-445a794f3e2f",
+              "name": "reason",
+              "value": "={{ JSON.parse($json.output[0].content[0].text).reason }}",
+              "type": "string"
+            },
+            {
+              "id": "2d4e03a3-db54-4ce2-a413-f54360cf0f59",
+              "name": "suggested reply",
+              "value": "={{ JSON.parse($json.output[0].content[0].text).suggested_reply }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -624,
+        928
+      ],
+      "id": "e21cd51a-a7ad-4f77-a406-d79e7a20aa9b",
+      "name": "Edit Fields2"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.escalate }}",
+                    "rightValue": "true",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "d3852386-3fd6-4d3c-b18d-773bfa4f2463"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Escalate Branch"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "672e7162-51fc-4a45-a850-d588e15e6c02",
+                    "leftValue": "={{ $json.escalate }}",
+                    "rightValue": "false",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Auto-Reply Branch"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        -416,
+        928
+      ],
+      "id": "75e56f89-8481-45cf-932d-e441a6bb069f",
+      "name": "Switch1"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Gmail Trigger').item.json.From }}",
+        "subject": "={{ $('Gmail Trigger').item.json.Subject }}",
+        "message": "={{ $json['suggested reply'] }}",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        -192,
+        1072
+      ],
+      "id": "bfb45a65-efd5-496b-b5b8-126575b08ba4",
+      "name": "Send a message3",
+      "webhookId": "ccb918ac-47e0-45d2-aae6-af77fdf8d264",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "foGhhoE6h6qLeU4b",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "select": "channel",
+        "channelId": {
+          "__rl": true,
+          "value": "C0AG99S8735",
+          "mode": "list",
+          "cachedResultName": "hot-leads"
+        },
+        "text": "=🚨 *EMAIL ESCALATION ALERT!*\n\nAn incoming email needs human attention:\n\n*From:* {{ $('Gmail Trigger').item.json.From }}\n*Subject:* {{ $('Gmail Trigger').item.json.Subject }}\n*Reason for Escalation:* {{ $('Edit Fields2').item.json.reason }}\n\n*Original Email:*\n{{ $('Gmail Trigger').item.json.snippet }}\n\n⚡ Please respond to this lead manually ASAP!",
+        "otherOptions": {}
+      },
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.4,
+      "position": [
+        -176,
+        816
+      ],
+      "id": "7fea261e-3464-4bf0-bbcf-5778d49c586e",
+      "name": "Send a message4",
+      "webhookId": "ef92d52d-d5ed-462f-b3fb-a74d05297833",
+      "credentials": {
+        "slackApi": {
+          "id": "HdxrFdq3prxc2BWP",
+          "name": "Slack account 2"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Message a model",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Message a model": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Create an event",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Create a record1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Create a record2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create an event": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a message": {
+      "main": [
+        [
+          {
+            "node": "Create a record",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create a record": {
+      "main": [
+        [
+          {
+            "node": "Send a message1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create a record1": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create a record2": {
+      "main": [
+        [
+          {
+            "node": "Send a message2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Telegram Trigger": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a text message": {
+      "main": [
+        []
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send a text message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gmail Trigger": {
+      "main": [
+        [
+          {
+            "node": "Message a model1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Message a model1": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields2": {
+      "main": [
+        [
+          {
+            "node": "Switch1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch1": {
+      "main": [
+        [
+          {
+            "node": "Send a message4",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send a message3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false,
+    "timeSavedMode": "fixed",
+    "errorWorkflow": "AYJkVVm3izqS0h2x",
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "versionId": "71fe73aa-8b5a-4ccb-839f-d7611fcd5ba4",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "06b8a67c21d4fc77231e09f6f75f953f6d7fad8efd32a1586c8d275ce8960bcb"
+  },
+  "id": "oLvNTB99jAVq0SQ0",
+  "tags": []
+}

@@ -1,0 +1,68 @@
+{
+  "name": "GrowPath Error Handler",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.errorTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "dc8049ca-03ed-437c-8b68-e7582c19cbe5",
+      "name": "Error Trigger"
+    },
+    {
+      "parameters": {
+        "sendTo": "preciousadenirantsacacaps2026@gmail.com",
+        "subject": "=🚨 GrowthPath Workflow Error:{{ $json.workflow.name }}",
+        "message": "=<h2 style=\"color: red;\">⚠️ Workflow Error Detected!</h2>\n\n<p>An error occurred in your GrowthPath Lead Generation workflow.</p>\n\n<table style=\"border-collapse: collapse; width: 100%;\">\n  <tr style=\"background: #f4f4f4;\">\n    <td style=\"padding: 10px; border: 1px solid #ddd;\"><strong>❌ Failed Node</strong></td>\n    <td style=\"padding: 10px; border: 1px solid #ddd;\">\n      {{ $json.workflow.name }}\n    </td>\n  </tr>\n  <tr>\n    <td style=\"padding: 10px; border: 1px solid #ddd;\"><strong>📋 Error Message</strong></td>\n    <td style=\"padding: 10px; border: 1px solid #ddd;\">\n      {{ $json.execution.error.message }}\n    </td>\n  </tr>\n  <tr style=\"background: #f4f4f4;\">\n    <td style=\"padding: 10px; border: 1px solid #ddd;\"><strong>🔄 Workflow Name</strong></td>\n    <td style=\"padding: 10px; border: 1px solid #ddd;\">\n      {{ $json.workflow.name }}\n    </td>\n  </tr>\n  <tr>\n    <td style=\"padding: 10px; border: 1px solid #ddd;\"><strong>🕐 Time of Error</strong></td>\n    <td style=\"padding: 10px; border: 1px solid #ddd;\">\n     {{ $now }} \n    </td>\n  </tr>\n  <tr style=\"background: #f4f4f4;\">\n    <td style=\"padding: 10px; border: 1px solid #ddd;\"><strong>🔢 Execution ID</strong></td>\n    <td style=\"padding: 10px; border: 1px solid #ddd;\">\n      {{ $json.execution.id }}\n    </td>\n  </tr>\n</table>\n\n<br>\n<p>Please log into your n8n dashboard to investigate and fix the issue.</p>\n\n<p style=\"color: #888;\">This is an automated error alert from your \nGrowthPath AI Lead System.</p>",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        208,
+        0
+      ],
+      "id": "af792ae2-e9b1-4f50-80af-b71331c2c503",
+      "name": "Send a message",
+      "webhookId": "f6b7e9b7-f694-42f3-8561-290c9df34a7f",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "foGhhoE6h6qLeU4b",
+          "name": "Gmail account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Error Trigger": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "1d498c69-f99e-46d4-a063-d7ea98319efa",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "06b8a67c21d4fc77231e09f6f75f953f6d7fad8efd32a1586c8d275ce8960bcb"
+  },
+  "id": "AYJkVVm3izqS0h2x",
+  "tags": []
+}

@@ -1,0 +1,45 @@
+# Environment & Secrets
+.env
+.env.local
+.env.*
+*.env
+secrets.json
+credentials.json
+config.local.*
+
+# API Keys & Tokens (NEVER commit these)
+*api_key*
+*access_token*
+*webhook_secret*
+
+# OS Files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Node / JS
+node_modules/
+npm-debug.log*
+dist/
+.next/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+venv/
+.venv/
+
+# Logs
+*.log
+logs/
+
+# Temp files
+*.tmp
+*.bak
+*.swp
+
+# IDE
+.vscode/
+.idea/
+*.iml
